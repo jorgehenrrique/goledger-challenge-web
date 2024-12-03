@@ -1,0 +1,8 @@
+GET http://ec2-54-91-215-149.compute-1.amazonaws.com/api/query/getSchema
+Authorization: Basic 
+
+# Para utilizar a API com Basic Auth utilize usuário "psAdmin" e senha "goledger".
+###
+POST http://ec2-54-91-215-149.compute-1.amazonaws.com/api/query/getHeader
+Authorization: Basic 
+# Content-Type: application/json
