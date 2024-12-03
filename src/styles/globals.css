@@ -70,3 +70,35 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+@layer utilities {
+  .backdrop-blur-dialog {
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+}
+
+/* Estilos personalizados para a barra de rolagem */
+::-webkit-scrollbar {
+  height: 6px;
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0d0d19; /* Cor de fundo da trilha */
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #2e1e53; /* Cor da barra de rolagem */
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #9c3267; /* Cor da barra de rolagem ao passar o mouse */
+}
+
+/* Para Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #9c3267 #2e1e53;
+}

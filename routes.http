@@ -1,8 +1,138 @@
-GET http://ec2-54-91-215-149.compute-1.amazonaws.com/api/query/getSchema
-Authorization: Basic 
-
-# Para utilizar a API com Basic Auth utilize usuário "psAdmin" e senha "goledger".
-###
+# Get Header estou utilizando para autenticar
 POST http://ec2-54-91-215-149.compute-1.amazonaws.com/api/query/getHeader
-Authorization: Basic 
-# Content-Type: application/json
+Authorization: Basic cHNBZG1pbjpnb2xlZGdlcg==
+
+###
+GET http://ec2-54-91-215-149.compute-1.amazonaws.com/api/query/getSchema
+Authorization: Basic cHNBZG1pbjpnb2xlZGdlcg==
+
+###
+POST http://ec2-54-91-215-149.compute-1.amazonaws.com/api/query/getSchema
+Authorization: Basic cHNBZG1pbjpnb2xlZGdlcg==
+Content-Type: application/json
+
+{ "assetType": "artist" }
+
+###
+POST http://ec2-54-91-215-149.compute-1.amazonaws.com/api/query/getSchema
+Authorization: Basic cHNBZG1pbjpnb2xlZGdlcg==
+Content-Type: application/json
+
+{ "assetType": "album" }
+
+###
+POST http://ec2-54-91-215-149.compute-1.amazonaws.com/api/query/getSchema
+Authorization: Basic cHNBZG1pbjpnb2xlZGdlcg==
+Content-Type: application/json
+
+{ "assetType": "song" }
+
+###
+POST http://ec2-54-91-215-149.compute-1.amazonaws.com/api/query/getSchema
+Authorization: Basic cHNBZG1pbjpnb2xlZGdlcg==
+Content-Type: application/json
+
+{ "assetType": "playlist" }
+
+###
+POST http://ec2-54-91-215-149.compute-1.amazonaws.com/api/query/getSchema
+Authorization: Basic cHNBZG1pbjpnb2xlZGdlcg==
+Content-Type: application/json
+
+{ "assetType": "assetTypeListData" }
+
+###
+POST http://ec2-54-91-215-149.compute-1.amazonaws.com/api/query/search
+Authorization: Basic cHNBZG1pbjpnb2xlZGdlcg==
+Content-Type: application/json
+
+{
+  "query": {
+    "selector": {
+      "@assetType": "artist"
+    }
+  }
+}
+
+###
+POST http://ec2-54-91-215-149.compute-1.amazonaws.com/api/query/search
+Authorization: Basic cHNBZG1pbjpnb2xlZGdlcg==
+Content-Type: application/json
+
+{
+  "query": {
+    "selector": {
+      "@assetType": "album"
+    }
+  }
+}
+
+###
+POST http://ec2-54-91-215-149.compute-1.amazonaws.com/api/query/search
+Authorization: Basic cHNBZG1pbjpnb2xlZGdlcg==
+Content-Type: application/json
+
+{
+  "query": {
+    "selector": {
+      "@assetType": "song"
+    }
+  }
+}
+
+###
+POST http://ec2-54-91-215-149.compute-1.amazonaws.com/api/query/search
+Authorization: Basic cHNBZG1pbjpnb2xlZGdlcg==
+Content-Type: application/json
+
+{
+  "query": {
+    "selector": {
+      "@assetType": "playlist"
+    }
+  }
+}
+
+###
+# Create Asset
+POST http://ec2-54-91-215-149.compute-1.amazonaws.com/api/invoke/createAsset
+Authorization: Basic cHNBZG1pbjpnb2xlZGdlcg==
+Content-Type: application/json
+
+{
+  "asset": [
+    {
+      "@assetType": "artist",
+      "name": "Artist 2",
+      "country": "Brazil"
+    }
+  ]
+}
+
+###
+# Update Asset
+PUT http://ec2-54-91-215-149.compute-1.amazonaws.com/api/invoke/updateAsset
+Authorization: Basic cHNBZG1pbjpnb2xlZGdlcg==
+Content-Type: application/json
+
+{
+  "update": {
+    "@assetType": "artist",
+    "@key": "artist:e343b62d-2504-5460-aa24-c29c2acb65d6",
+    "name": "updated2",
+    "country": "Brazil updated 2"
+  }
+}
+
+###
+# Delete Asset
+DELETE http://ec2-54-91-215-149.compute-1.amazonaws.com/api/invoke/deleteAsset
+Authorization: Basic cHNBZG1pbjpnb2xlZGdlcg==
+Content-Type: application/json
+
+{
+  "key": {
+    "@assetType": "artist",
+    "@key": "artist:e343b62d-2504-5460-aa24-c29c2acb65d6"
+  }
+}
