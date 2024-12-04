@@ -24,16 +24,11 @@ import {
   DialogTitle,
 } from '../ui/dialog';
 import { ArtistForm } from '../forms/ArtistForm';
+import { ListProps } from '@/types/props';
 
 const ITEMS_PER_PAGE = 10;
 
-export function ArtistList({
-  updateList,
-  setUpdateList,
-}: {
-  updateList: boolean;
-  setUpdateList: (value: boolean) => void;
-}) {
+export function ArtistList({ updateList, setUpdateList }: ListProps) {
   const [artists, setArtists] = useState<Artist[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);

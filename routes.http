@@ -1,49 +1,49 @@
 # Get Header estou utilizando para autenticar
 POST http://ec2-54-91-215-149.compute-1.amazonaws.com/api/query/getHeader
-Authorization: Basic cHNBZG1pbjpnb2xlZGdlcg==
+Authorization: Basic 
 
 ###
 GET http://ec2-54-91-215-149.compute-1.amazonaws.com/api/query/getSchema
-Authorization: Basic cHNBZG1pbjpnb2xlZGdlcg==
+Authorization: Basic 
 
 ###
 POST http://ec2-54-91-215-149.compute-1.amazonaws.com/api/query/getSchema
-Authorization: Basic cHNBZG1pbjpnb2xlZGdlcg==
+Authorization: Basic 
 Content-Type: application/json
 
 { "assetType": "artist" }
 
 ###
 POST http://ec2-54-91-215-149.compute-1.amazonaws.com/api/query/getSchema
-Authorization: Basic cHNBZG1pbjpnb2xlZGdlcg==
+Authorization: Basic 
 Content-Type: application/json
 
 { "assetType": "album" }
 
 ###
 POST http://ec2-54-91-215-149.compute-1.amazonaws.com/api/query/getSchema
-Authorization: Basic cHNBZG1pbjpnb2xlZGdlcg==
+Authorization: Basic 
 Content-Type: application/json
 
 { "assetType": "song" }
 
 ###
 POST http://ec2-54-91-215-149.compute-1.amazonaws.com/api/query/getSchema
-Authorization: Basic cHNBZG1pbjpnb2xlZGdlcg==
+Authorization: Basic 
 Content-Type: application/json
 
 { "assetType": "playlist" }
 
 ###
 POST http://ec2-54-91-215-149.compute-1.amazonaws.com/api/query/getSchema
-Authorization: Basic cHNBZG1pbjpnb2xlZGdlcg==
+Authorization: Basic 
 Content-Type: application/json
 
 { "assetType": "assetTypeListData" }
 
 ###
 POST http://ec2-54-91-215-149.compute-1.amazonaws.com/api/query/search
-Authorization: Basic cHNBZG1pbjpnb2xlZGdlcg==
+Authorization: Basic 
 Content-Type: application/json
 
 {
@@ -56,7 +56,7 @@ Content-Type: application/json
 
 ###
 POST http://ec2-54-91-215-149.compute-1.amazonaws.com/api/query/search
-Authorization: Basic cHNBZG1pbjpnb2xlZGdlcg==
+Authorization: Basic 
 Content-Type: application/json
 
 {
@@ -69,7 +69,7 @@ Content-Type: application/json
 
 ###
 POST http://ec2-54-91-215-149.compute-1.amazonaws.com/api/query/search
-Authorization: Basic cHNBZG1pbjpnb2xlZGdlcg==
+Authorization: Basic 
 Content-Type: application/json
 
 {
@@ -82,7 +82,7 @@ Content-Type: application/json
 
 ###
 POST http://ec2-54-91-215-149.compute-1.amazonaws.com/api/query/search
-Authorization: Basic cHNBZG1pbjpnb2xlZGdlcg==
+Authorization: Basic 
 Content-Type: application/json
 
 {
@@ -96,7 +96,7 @@ Content-Type: application/json
 ###
 # Create Asset
 POST http://ec2-54-91-215-149.compute-1.amazonaws.com/api/invoke/createAsset
-Authorization: Basic cHNBZG1pbjpnb2xlZGdlcg==
+Authorization: Basic 
 Content-Type: application/json
 
 {
@@ -112,7 +112,7 @@ Content-Type: application/json
 ###
 # Update Asset
 PUT http://ec2-54-91-215-149.compute-1.amazonaws.com/api/invoke/updateAsset
-Authorization: Basic cHNBZG1pbjpnb2xlZGdlcg==
+Authorization: Basic 
 Content-Type: application/json
 
 {
@@ -127,7 +127,7 @@ Content-Type: application/json
 ###
 # Delete Asset
 DELETE http://ec2-54-91-215-149.compute-1.amazonaws.com/api/invoke/deleteAsset
-Authorization: Basic cHNBZG1pbjpnb2xlZGdlcg==
+Authorization: Basic 
 Content-Type: application/json
 
 {

@@ -6,13 +6,8 @@ import { Input } from '../ui/input';
 import { Button } from '../ui/button';
 import { toast } from 'sonner';
 import { Loader2 } from 'lucide-react';
-import { Artist, ArtistPayload } from '@/types';
-
-interface ArtistFormProps {
-  artist?: Artist;
-  onSuccess?: () => void;
-  onCancel?: () => void;
-}
+import { ArtistPayload } from '@/types';
+import { ArtistFormProps } from '@/types/props';
 
 export function ArtistForm({ artist, onSuccess, onCancel }: ArtistFormProps) {
   const [isLoading, setIsLoading] = useState(false);

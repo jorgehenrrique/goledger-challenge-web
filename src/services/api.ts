@@ -1,7 +1,4 @@
 import {
-  // AssetSchemaResponse,
-  // GetSchemaRequest,
-  // SchemaResponse,
   BaseAssetPayload,
   CreateAssetRequest,
   DeleteAssetRequest,
