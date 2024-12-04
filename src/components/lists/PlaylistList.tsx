@@ -1,10 +1,17 @@
 'use client';
 
-import { Playlist } from '@/types';
+import { Album, Artist, Playlist, Song } from '@/types';
 import { useCallback, useEffect, useState } from 'react';
 import { api } from '@/services/api';
 import { Card } from '../ui/card';
-import { Music4, Edit, Trash2, Loader2, ArrowUpDown } from 'lucide-react';
+import {
+  Music4,
+  Edit,
+  Trash2,
+  Loader2,
+  ArrowUpDown,
+  ListMusic,
+} from 'lucide-react';
 import { Button } from '../ui/button';
 import { toast } from 'sonner';
 import { DeleteAlertDialog } from '../ui/AlertDialog';
@@ -25,22 +32,33 @@ import {
 } from '../ui/select';
 import { PlaylistForm } from '../forms/PlaylistForm';
 import { ListProps } from '@/types/props';
+import { PlaylistDetails } from '../details/PlaylistDetails';
 
 const ITEMS_PER_PAGE = 10;
 
 export function PlaylistList({ updateList, setUpdateList }: ListProps) {
   const [playlists, setPlaylists] = useState<Playlist[]>([]);
+  const [songs, setSongs] = useState<Song[]>([]);
+  const [albums, setAlbums] = useState<Album[]>([]);
+  const [artists, setArtists] = useState<Artist[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [sortField, setSortField] = useState<'name' | 'songCount'>('name');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
   const [search, setSearch] = useState('');
+
   const [deleteDialog, setDeleteDialog] = useState<{
     isOpen: boolean;
     playlistId: string | null;
     playlistName: string | null;
   }>({ isOpen: false, playlistId: null, playlistName: null });
+
   const [editDialog, setEditDialog] = useState<{
+    isOpen: boolean;
+    playlist: Playlist | null;
+  }>({ isOpen: false, playlist: null });
+
+  const [detailsDialog, setDetailsDialog] = useState<{
     isOpen: boolean;
     playlist: Playlist | null;
   }>({ isOpen: false, playlist: null });
@@ -48,9 +66,22 @@ export function PlaylistList({ updateList, setUpdateList }: ListProps) {
   const fetchData = useCallback(async () => {
     setIsLoading(true);
     try {
-      const playlistsResponse = await api.searchAssets<Playlist>('playlist');
+      const [
+        playlistsResponse,
+        songsResponse,
+        albumsResponse,
+        artistsResponse,
+      ] = await Promise.all([
+        api.searchAssets<Playlist>('playlist'),
+        api.searchAssets<Song>('song'),
+        api.searchAssets<Album>('album'),
+        api.searchAssets<Artist>('artist'),
+      ]);
 
       setPlaylists(playlistsResponse.result);
+      setSongs(songsResponse.result);
+      setAlbums(albumsResponse.result);
+      setArtists(artistsResponse.result);
     } catch (error: unknown) {
       toast.error('Erro ao carregar dados', {
         description:
@@ -155,17 +186,22 @@ export function PlaylistList({ updateList, setUpdateList }: ListProps) {
       <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'>
         {paginatedPlaylists.map((playlist) => (
           <Card key={playlist['@key']} className='p-4'>
-            <div className='flex items-center gap-4'>
-              <div className='p-2 bg-indigo-600/10 rounded-full'>
-                <Music4 className='w-6 h-6 text-indigo-600' />
+            <div className='flex flex-row justify-between gap-2'>
+              <div
+                className='flex p-4 items-center gap-3 cursor-pointer hover:bg-zinc-800/50 transition-colors rounded-lg'
+                onClick={() => setDetailsDialog({ isOpen: true, playlist })}
+              >
+                <div className='p-2 bg-indigo-600/10 rounded-full w-fit'>
+                  <ListMusic className='w-6 h-6 text-[#9c3267]' />
+                </div>
+                <div className='flex-1'>
+                  <h3 className='font-semibold'>{playlist.name}</h3>
+                  <p className='text-sm text-zinc-400'>
+                    {getPlaylistInfo(playlist)}
+                  </p>
+                </div>
               </div>
-              <div className='flex-1'>
-                <h3 className='font-semibold'>{playlist.name}</h3>
-                <p className='text-sm text-zinc-400'>
-                  {getPlaylistInfo(playlist)}
-                </p>
-              </div>
-              <div className='flex gap-2'>
+              <div className='flex flex-col gap-2'>
                 <Button
                   variant='ghost'
                   size='icon'
@@ -248,6 +284,17 @@ export function PlaylistList({ updateList, setUpdateList }: ListProps) {
           )}
         </DialogContent>
       </Dialog>
+
+      <PlaylistDetails
+        isOpen={detailsDialog.isOpen}
+        onClose={() => setDetailsDialog({ isOpen: false, playlist: null })}
+        playlist={detailsDialog.playlist!}
+        songs={songs.filter((song) =>
+          detailsDialog.playlist?.songs.some((s) => s['@key'] === song['@key'])
+        )}
+        albums={albums}
+        artists={artists}
+      />
     </div>
   );
 }

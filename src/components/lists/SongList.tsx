@@ -25,6 +25,7 @@ import {
 } from '../ui/dialog';
 import { SongForm } from '../forms/SongForm';
 import { ListProps } from '@/types/props';
+import { SongDetails } from '../details/SongDetails';
 
 const ITEMS_PER_PAGE = 10;
 
@@ -39,12 +40,19 @@ export function SongList({ updateList, setUpdateList }: ListProps) {
   );
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
   const [search, setSearch] = useState('');
+
   const [deleteDialog, setDeleteDialog] = useState<{
     isOpen: boolean;
     songId: string | null;
     songName: string | null;
   }>({ isOpen: false, songId: null, songName: null });
+
   const [editDialog, setEditDialog] = useState<{
+    isOpen: boolean;
+    song: Song | null;
+  }>({ isOpen: false, song: null });
+
+  const [detailsDialog, setDetailsDialog] = useState<{
     isOpen: boolean;
     song: Song | null;
   }>({ isOpen: false, song: null });
@@ -194,17 +202,22 @@ export function SongList({ updateList, setUpdateList }: ListProps) {
           const { albumName, artistName } = getAlbumInfo(song.album['@key']);
           return (
             <Card key={song['@key']} className='p-4'>
-              <div className='flex items-center gap-4'>
-                <div className='p-2 bg-indigo-600/10 rounded-full'>
-                  <Music4 className='w-6 h-6 text-indigo-600' />
+              <div className='flex flex-row justify-between gap-2'>
+                <div
+                  className='flex p-4 items-center gap-3 cursor-pointer hover:bg-zinc-800/50 transition-colors rounded-lg'
+                  onClick={() => setDetailsDialog({ isOpen: true, song })}
+                >
+                  <div className='p-2 bg-indigo-600/10 rounded-full'>
+                    <Music4 className='w-6 h-6 text-[#f165ab]' />
+                  </div>
+                  <div className='flex-1'>
+                    <h3 className='font-semibold'>{song.name}</h3>
+                    <p className='text-sm text-zinc-400'>
+                      {albumName} • {artistName}
+                    </p>
+                  </div>
                 </div>
-                <div className='flex-1'>
-                  <h3 className='font-semibold'>{song.name}</h3>
-                  <p className='text-sm text-zinc-400'>
-                    {albumName} • {artistName}
-                  </p>
-                </div>
-                <div className='flex gap-2'>
+                <div className='flex flex-col gap-2'>
                   <Button
                     variant='ghost'
                     size='icon'
@@ -288,6 +301,22 @@ export function SongList({ updateList, setUpdateList }: ListProps) {
           )}
         </DialogContent>
       </Dialog>
+
+      <SongDetails
+        isOpen={detailsDialog.isOpen}
+        onClose={() => setDetailsDialog({ isOpen: false, song: null })}
+        song={detailsDialog.song!}
+        album={albums.find(
+          (album) => album['@key'] === detailsDialog.song?.album['@key']
+        )}
+        artist={artists.find(
+          (artist) =>
+            artist['@key'] ===
+            albums.find(
+              (album) => album['@key'] === detailsDialog.song?.album['@key']
+            )?.artist['@key']
+        )}
+      />
     </div>
   );
 }

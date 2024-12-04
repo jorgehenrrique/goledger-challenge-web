@@ -34,7 +34,7 @@ export default function HomePage() {
           playlists: playlists.result.slice(-5),
         });
       } catch (error) {
-        console.error('Erro ao carregar itens recentes:', error);
+        // console.error('Erro ao carregar itens recentes:', error);
         toast.error('Erro ao carregar itens recentes');
       } finally {
         setIsLoading(false);

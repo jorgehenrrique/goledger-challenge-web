@@ -1,6 +1,6 @@
 'use client';
 
-import { Album, Artist } from '@/types';
+import { Album, Artist, Song } from '@/types';
 import { useCallback, useEffect, useState } from 'react';
 import { api } from '@/services/api';
 import { Card } from '../ui/card';
@@ -25,12 +25,14 @@ import {
 } from '../ui/dialog';
 import { AlbumForm } from '../forms/AlbumForm';
 import { ListProps } from '@/types/props';
+import { AlbumDetails } from '../details/AlbumDetails';
 
 const ITEMS_PER_PAGE = 10;
 
 export function AlbumList({ updateList, setUpdateList }: ListProps) {
   const [albums, setAlbums] = useState<Album[]>([]);
   const [artists, setArtists] = useState<Artist[]>([]);
+  const [songs, setSongs] = useState<Song[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [sortField, setSortField] = useState<'name' | 'year' | 'artist'>(
@@ -38,12 +40,19 @@ export function AlbumList({ updateList, setUpdateList }: ListProps) {
   );
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
   const [search, setSearch] = useState('');
+
   const [deleteDialog, setDeleteDialog] = useState<{
     isOpen: boolean;
     albumId: string | null;
     albumName: string | null;
   }>({ isOpen: false, albumId: null, albumName: null });
+
   const [editDialog, setEditDialog] = useState<{
+    isOpen: boolean;
+    album: Album | null;
+  }>({ isOpen: false, album: null });
+
+  const [detailsDialog, setDetailsDialog] = useState<{
     isOpen: boolean;
     album: Album | null;
   }>({ isOpen: false, album: null });
@@ -51,13 +60,16 @@ export function AlbumList({ updateList, setUpdateList }: ListProps) {
   const fetchData = useCallback(async () => {
     setIsLoading(true);
     try {
-      const [albumsResponse, artistsResponse] = await Promise.all([
-        api.searchAssets<Album>('album'),
-        api.searchAssets<Artist>('artist'),
-      ]);
+      const [albumsResponse, artistsResponse, songsResponse] =
+        await Promise.all([
+          api.searchAssets<Album>('album'),
+          api.searchAssets<Artist>('artist'),
+          api.searchAssets<Song>('song'),
+        ]);
 
       setAlbums(albumsResponse.result);
       setArtists(artistsResponse.result);
+      setSongs(songsResponse.result);
     } catch (error: unknown) {
       toast.error('Erro ao carregar dados', {
         description:
@@ -176,17 +188,22 @@ export function AlbumList({ updateList, setUpdateList }: ListProps) {
       <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'>
         {paginatedAlbums.map((album) => (
           <Card key={album['@key']} className='p-4'>
-            <div className='flex items-center gap-4'>
-              <div className='p-2 bg-indigo-600/10 rounded-full'>
-                <Disc3 className='w-6 h-6 text-indigo-600' />
+            <div className='flex flex-row justify-between gap-2'>
+              <div
+                className='flex p-4 items-center gap-3 cursor-pointer hover:bg-zinc-800/50 transition-colors rounded-lg'
+                onClick={() => setDetailsDialog({ isOpen: true, album })}
+              >
+                <div className='p-2 bg-indigo-600/10 rounded-full w-fit'>
+                  <Disc3 className='w-6 h-6 text-indigo-600' />
+                </div>
+                <div className='flex-1'>
+                  <h3 className='font-semibold'>{album.name}</h3>
+                  <p className='text-sm text-zinc-400'>
+                    {getArtistName(album.artist['@key'])} • {album.year}
+                  </p>
+                </div>
               </div>
-              <div className='flex-1'>
-                <h3 className='font-semibold'>{album.name}</h3>
-                <p className='text-sm text-zinc-400'>
-                  {getArtistName(album.artist['@key'])} • {album.year}
-                </p>
-              </div>
-              <div className='flex gap-2'>
+              <div className='flex flex-col gap-2'>
                 <Button
                   variant='ghost'
                   size='icon'
@@ -267,6 +284,18 @@ export function AlbumList({ updateList, setUpdateList }: ListProps) {
           )}
         </DialogContent>
       </Dialog>
+
+      <AlbumDetails
+        isOpen={detailsDialog.isOpen}
+        onClose={() => setDetailsDialog({ isOpen: false, album: null })}
+        album={detailsDialog.album!}
+        artist={artists.find(
+          (artist) => artist['@key'] === detailsDialog.album?.artist['@key']
+        )}
+        songs={songs.filter(
+          (song) => song.album['@key'] === detailsDialog.album?.['@key']
+        )}
+      />
     </div>
   );
 }

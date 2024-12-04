@@ -1,6 +1,6 @@
 'use client';
 
-import { Artist } from '@/types';
+import { Album, Artist, Song } from '@/types';
 import { useCallback, useEffect, useState } from 'react';
 import { api } from '@/services/api';
 import { Card } from '../ui/card';
@@ -25,22 +25,32 @@ import {
 } from '../ui/dialog';
 import { ArtistForm } from '../forms/ArtistForm';
 import { ListProps } from '@/types/props';
+import { ArtistDetails } from '../details/ArtistDetails';
 
 const ITEMS_PER_PAGE = 10;
 
 export function ArtistList({ updateList, setUpdateList }: ListProps) {
   const [artists, setArtists] = useState<Artist[]>([]);
+  const [albums, setAlbums] = useState<Album[]>([]);
+  const [songs, setSongs] = useState<Song[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [sortField, setSortField] = useState<'name' | 'country'>('name');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
   const [search, setSearch] = useState('');
+
   const [deleteDialog, setDeleteDialog] = useState<{
     isOpen: boolean;
     artistId: string | null;
     artistName: string | null;
   }>({ isOpen: false, artistId: null, artistName: null });
+
   const [editDialog, setEditDialog] = useState<{
+    isOpen: boolean;
+    artist: Artist | null;
+  }>({ isOpen: false, artist: null });
+
+  const [detailsDialog, setDetailsDialog] = useState<{
     isOpen: boolean;
     artist: Artist | null;
   }>({ isOpen: false, artist: null });
@@ -48,9 +58,16 @@ export function ArtistList({ updateList, setUpdateList }: ListProps) {
   const fetchArtists = useCallback(async () => {
     setIsLoading(true);
     try {
-      const response = await api.searchAssets<Artist>('artist');
+      const [artistsResponse, albumsResponse, songsResponse] =
+        await Promise.all([
+          api.searchAssets<Artist>('artist'),
+          api.searchAssets<Album>('album'),
+          api.searchAssets<Song>('song'),
+        ]);
 
-      setArtists(response.result);
+      setArtists(artistsResponse.result);
+      setAlbums(albumsResponse.result);
+      setSongs(songsResponse.result);
     } catch (error: unknown) {
       toast.error('Erro ao carregar artistas', {
         description:
@@ -148,15 +165,20 @@ export function ArtistList({ updateList, setUpdateList }: ListProps) {
       <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'>
         {paginatedArtists.map((artist) => (
           <Card key={artist['@key']} className='p-4'>
-            <div className='flex items-center gap-4'>
-              <div className='p-2 bg-indigo-600/10 rounded-full'>
-                <Mic2 className='w-6 h-6 text-indigo-600' />
+            <div className='flex flex-row justify-between gap-2'>
+              <div
+                className='flex p-4 items-center gap-3 cursor-pointer hover:bg-zinc-800/50 transition-colors rounded-lg'
+                onClick={() => setDetailsDialog({ isOpen: true, artist })}
+              >
+                <div className='p-2 bg-indigo-600/10 rounded-full w-fit'>
+                  <Mic2 className='w-6 h-6 text-[#5c3ca8]' />
+                </div>
+                <div className='flex-1'>
+                  <h3 className='font-semibold'>{artist.name}</h3>
+                  <p className='text-sm text-zinc-400'>{artist.country}</p>
+                </div>
               </div>
-              <div className='flex-1'>
-                <h3 className='font-semibold'>{artist.name}</h3>
-                <p className='text-sm text-zinc-400'>{artist.country}</p>
-              </div>
-              <div className='flex gap-2'>
+              <div className='flex flex-col gap-2'>
                 <Button
                   variant='ghost'
                   size='icon'
@@ -239,6 +261,20 @@ export function ArtistList({ updateList, setUpdateList }: ListProps) {
           )}
         </DialogContent>
       </Dialog>
+
+      <ArtistDetails
+        isOpen={detailsDialog.isOpen}
+        onClose={() => setDetailsDialog({ isOpen: false, artist: null })}
+        artist={detailsDialog.artist!}
+        albums={albums.filter(
+          (album) => album.artist['@key'] === detailsDialog.artist?.['@key']
+        )}
+        songs={songs.filter(
+          (song) =>
+            albums.find((album) => album['@key'] === song.album['@key'])
+              ?.artist['@key'] === detailsDialog.artist?.['@key']
+        )}
+      />
     </div>
   );
 }
