@@ -107,8 +107,8 @@ export function ArtistList({ updateList, setUpdateList }: ListProps) {
 
   if (isLoading) {
     return (
-      <div className='flex justify-center items-center h-full'>
-        <Loader2 className='w-10 h-10 animate-spin' />
+      <div className='flex-1 flex items-center justify-center min-h-[400px]'>
+        <Loader2 className='w-10 h-10 animate-spin text-indigo-600' />
       </div>
     );
   }

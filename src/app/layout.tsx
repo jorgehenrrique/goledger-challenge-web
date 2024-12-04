@@ -11,14 +11,29 @@ const geistSans = localFont({
 });
 
 export const metadata: Metadata = {
-  title: 'Goledger Challenge',
-  description: 'Goledger Challenge',
+  title: 'Goledger Music',
+  description: 'Goledger Music',
   creator: 'Jorge Henrique',
   authors: [
     { name: 'Jorge Henrique', url: 'https://github.com/jorgehenrrique' },
   ],
   icons: {
-    shortcut: '../assets/favicon.ico',
+    shortcut: '/favicon.ico',
+    icon: [
+      {
+        url: '/music-32.png',
+        sizes: '32x32',
+        type: 'image/png',
+      },
+      {
+        url: '/music-240.png',
+        sizes: '240x240',
+        type: 'image/png',
+      },
+    ],
+  },
+  other: {
+    icon: '/music-240.png',
   },
 };
 

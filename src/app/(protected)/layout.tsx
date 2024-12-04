@@ -2,15 +2,16 @@
 
 import { MainLayout } from '@/components/layout/MainLayout';
 import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
+import { ChildrenProps } from '@/types/props';
+import { usePathname } from 'next/navigation';
 
-export default function ProtectedLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function ProtectedLayout({ children }: ChildrenProps) {
+  const pathname = usePathname();
+  const showHeader = pathname === '/';
+
   return (
     <ProtectedRoute>
-      <MainLayout>{children}</MainLayout>
+      <MainLayout showHeader={showHeader}>{children}</MainLayout>
     </ProtectedRoute>
   );
 }

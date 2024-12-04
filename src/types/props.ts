@@ -1,30 +1,35 @@
 import { Album, Artist, Playlist, Song } from '.';
 
+export interface ChildrenProps {
+  children: React.ReactNode;
+}
+
+export interface MainLayoutProps extends ChildrenProps {
+  showHeader?: boolean;
+}
+
 export interface ListProps {
   updateList: boolean;
   setUpdateList: (value: boolean) => void;
 }
 
-export interface ArtistFormProps {
+export interface FormProps {
+  onSuccess?: () => void;
+  onCancel?: () => void;
+}
+
+export interface ArtistFormProps extends FormProps {
   artist?: Artist;
-  onSuccess?: () => void;
-  onCancel?: () => void;
 }
 
-export interface AlbumFormProps {
+export interface AlbumFormProps extends FormProps {
   album?: Album;
-  onSuccess?: () => void;
-  onCancel?: () => void;
 }
 
-export interface SongFormProps {
+export interface SongFormProps extends FormProps {
   song?: Song;
-  onSuccess?: () => void;
-  onCancel?: () => void;
 }
 
-export interface PlaylistFormProps {
+export interface PlaylistFormProps extends FormProps {
   playlist?: Playlist;
-  onSuccess?: () => void;
-  onCancel?: () => void;
 }
