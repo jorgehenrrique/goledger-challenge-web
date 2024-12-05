@@ -1,7 +1,7 @@
 'use client';
 
-import { Album, Artist, Song } from '@/types';
-import { useCallback, useEffect, useState } from 'react';
+import { Artist } from '@/types';
+import { useEffect, useState } from 'react';
 import { api } from '@/services/api';
 import { Card } from '../ui/card';
 import { Mic2, Edit, Trash2, Loader2, ArrowUpDown } from 'lucide-react';
@@ -26,14 +26,13 @@ import {
 import { ArtistForm } from '../forms/ArtistForm';
 import { ListProps } from '@/types/props';
 import { ArtistDetails } from '../details/ArtistDetails';
+import { useBasicData } from '@/hooks/useBasicData';
 
 const ITEMS_PER_PAGE = 10;
 
 export function ArtistList({ updateList, setUpdateList }: ListProps) {
-  const [artists, setArtists] = useState<Artist[]>([]);
-  const [albums, setAlbums] = useState<Album[]>([]);
-  const [songs, setSongs] = useState<Song[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const { songs, albums, artists, isLoading, setIsLoading, fetchData } =
+    useBasicData(() => setUpdateList(false));
   const [currentPage, setCurrentPage] = useState(1);
   const [sortField, setSortField] = useState<'name' | 'country'>('name');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
@@ -55,33 +54,9 @@ export function ArtistList({ updateList, setUpdateList }: ListProps) {
     artist: Artist | null;
   }>({ isOpen: false, artist: null });
 
-  const fetchArtists = useCallback(async () => {
-    setIsLoading(true);
-    try {
-      const [artistsResponse, albumsResponse, songsResponse] =
-        await Promise.all([
-          api.searchAssets<Artist>('artist'),
-          api.searchAssets<Album>('album'),
-          api.searchAssets<Song>('song'),
-        ]);
-
-      setArtists(artistsResponse.result);
-      setAlbums(albumsResponse.result);
-      setSongs(songsResponse.result);
-    } catch (error: unknown) {
-      toast.error('Erro ao carregar artistas', {
-        description:
-          error instanceof Error ? error.message : 'Erro desconhecido',
-      });
-    } finally {
-      setIsLoading(false);
-      setUpdateList(false);
-    }
-  }, [setUpdateList]);
-
   useEffect(() => {
-    fetchArtists();
-  }, [fetchArtists, updateList]);
+    fetchData();
+  }, [fetchData, updateList]);
 
   const handleDelete = async (id: string) => {
     setIsLoading(true);
@@ -89,7 +64,7 @@ export function ArtistList({ updateList, setUpdateList }: ListProps) {
       await api.deleteAsset('artist', id);
 
       toast.success('Artista removido com sucesso!');
-      fetchArtists();
+      fetchData();
     } catch (error: unknown) {
       toast.error('Erro ao remover artista', {
         description:
@@ -254,7 +229,7 @@ export function ArtistList({ updateList, setUpdateList }: ListProps) {
               artist={editDialog.artist}
               onSuccess={() => {
                 setEditDialog({ isOpen: false, artist: null });
-                fetchArtists();
+                fetchData();
               }}
               onCancel={() => setEditDialog({ isOpen: false, artist: null })}
             />

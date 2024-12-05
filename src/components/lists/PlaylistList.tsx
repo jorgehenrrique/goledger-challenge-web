@@ -1,17 +1,10 @@
 'use client';
 
-import { Album, Artist, Playlist, Song } from '@/types';
-import { useCallback, useEffect, useState } from 'react';
+import { Playlist } from '@/types';
+import { useEffect, useState } from 'react';
 import { api } from '@/services/api';
 import { Card } from '../ui/card';
-import {
-  Music4,
-  Edit,
-  Trash2,
-  Loader2,
-  ArrowUpDown,
-  ListMusic,
-} from 'lucide-react';
+import { Edit, Trash2, Loader2, ArrowUpDown, ListMusic } from 'lucide-react';
 import { Button } from '../ui/button';
 import { toast } from 'sonner';
 import { DeleteAlertDialog } from '../ui/AlertDialog';
@@ -33,15 +26,20 @@ import {
 import { PlaylistForm } from '../forms/PlaylistForm';
 import { ListProps } from '@/types/props';
 import { PlaylistDetails } from '../details/PlaylistDetails';
+import { useExtendedData } from '@/hooks/useExtendedData';
 
 const ITEMS_PER_PAGE = 10;
 
 export function PlaylistList({ updateList, setUpdateList }: ListProps) {
-  const [playlists, setPlaylists] = useState<Playlist[]>([]);
-  const [songs, setSongs] = useState<Song[]>([]);
-  const [albums, setAlbums] = useState<Album[]>([]);
-  const [artists, setArtists] = useState<Artist[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const {
+    songs,
+    albums,
+    artists,
+    playlists,
+    isLoading,
+    setIsLoading,
+    fetchData,
+  } = useExtendedData(() => setUpdateList(false));
   const [currentPage, setCurrentPage] = useState(1);
   const [sortField, setSortField] = useState<'name' | 'songCount'>('name');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
@@ -62,36 +60,6 @@ export function PlaylistList({ updateList, setUpdateList }: ListProps) {
     isOpen: boolean;
     playlist: Playlist | null;
   }>({ isOpen: false, playlist: null });
-
-  const fetchData = useCallback(async () => {
-    setIsLoading(true);
-    try {
-      const [
-        playlistsResponse,
-        songsResponse,
-        albumsResponse,
-        artistsResponse,
-      ] = await Promise.all([
-        api.searchAssets<Playlist>('playlist'),
-        api.searchAssets<Song>('song'),
-        api.searchAssets<Album>('album'),
-        api.searchAssets<Artist>('artist'),
-      ]);
-
-      setPlaylists(playlistsResponse.result);
-      setSongs(songsResponse.result);
-      setAlbums(albumsResponse.result);
-      setArtists(artistsResponse.result);
-    } catch (error: unknown) {
-      toast.error('Erro ao carregar dados', {
-        description:
-          error instanceof Error ? error.message : 'Erro desconhecido',
-      });
-    } finally {
-      setIsLoading(false);
-      setUpdateList(false);
-    }
-  }, [setUpdateList]);
 
   useEffect(() => {
     fetchData();

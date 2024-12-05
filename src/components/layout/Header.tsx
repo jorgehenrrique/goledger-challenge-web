@@ -1,39 +1,22 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { Input } from '../ui/input';
 import { Search, Music4, Disc3, User2 } from 'lucide-react';
-import { api } from '@/services/api';
-import { Song, Album, Artist } from '@/types';
+import { useBasicData } from '@/hooks/useBasicData';
 
 export function Header() {
-  const [stats, setStats] = useState({
-    songs: 0,
-    albums: 0,
-    artists: 0,
-  });
+  const { songs, albums, artists, fetchData } = useBasicData();
+
+  const stats = {
+    songs: songs.length,
+    albums: albums.length,
+    artists: artists.length,
+  };
 
   useEffect(() => {
-    async function fetchStats() {
-      try {
-        const [songs, albums, artists] = await Promise.all([
-          api.searchAssets<Song>('song'),
-          api.searchAssets<Album>('album'),
-          api.searchAssets<Artist>('artist'),
-        ]);
-
-        setStats({
-          songs: songs.result.length,
-          albums: albums.result.length,
-          artists: artists.result.length,
-        });
-      } catch (error) {
-        console.error('Erro ao carregar estatísticas:', error);
-      }
-    }
-
-    fetchStats();
-  }, []);
+    fetchData();
+  }, [fetchData]);
 
   return (
     <header className='border-b border-zinc-800 px-6 py-3'>

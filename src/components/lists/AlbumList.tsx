@@ -1,7 +1,7 @@
 'use client';
 
-import { Album, Artist, Song } from '@/types';
-import { useCallback, useEffect, useState } from 'react';
+import { Album } from '@/types';
+import { useEffect, useState } from 'react';
 import { api } from '@/services/api';
 import { Card } from '../ui/card';
 import { Disc3, Edit, Trash2, Loader2, ArrowUpDown } from 'lucide-react';
@@ -26,14 +26,13 @@ import {
 import { AlbumForm } from '../forms/AlbumForm';
 import { ListProps } from '@/types/props';
 import { AlbumDetails } from '../details/AlbumDetails';
+import { useBasicData } from '@/hooks/useBasicData';
 
 const ITEMS_PER_PAGE = 10;
 
 export function AlbumList({ updateList, setUpdateList }: ListProps) {
-  const [albums, setAlbums] = useState<Album[]>([]);
-  const [artists, setArtists] = useState<Artist[]>([]);
-  const [songs, setSongs] = useState<Song[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const { songs, albums, artists, isLoading, setIsLoading, fetchData } =
+    useBasicData(() => setUpdateList(false));
   const [currentPage, setCurrentPage] = useState(1);
   const [sortField, setSortField] = useState<'name' | 'year' | 'artist'>(
     'name'
@@ -57,33 +56,9 @@ export function AlbumList({ updateList, setUpdateList }: ListProps) {
     album: Album | null;
   }>({ isOpen: false, album: null });
 
-  const fetchData = useCallback(async () => {
-    setIsLoading(true);
-    try {
-      const [albumsResponse, artistsResponse, songsResponse] =
-        await Promise.all([
-          api.searchAssets<Album>('album'),
-          api.searchAssets<Artist>('artist'),
-          api.searchAssets<Song>('song'),
-        ]);
-
-      setAlbums(albumsResponse.result);
-      setArtists(artistsResponse.result);
-      setSongs(songsResponse.result);
-    } catch (error: unknown) {
-      toast.error('Erro ao carregar dados', {
-        description:
-          error instanceof Error ? error.message : 'Erro desconhecido',
-      });
-    } finally {
-      setIsLoading(false);
-      setUpdateList(false);
-    }
-  }, [setUpdateList]);
-
   useEffect(() => {
     fetchData();
-  }, [fetchData, updateList]);
+  }, [updateList, fetchData]);
 
   const handleDelete = async (id: string) => {
     setIsLoading(true);

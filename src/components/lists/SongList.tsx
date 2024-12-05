@@ -1,7 +1,7 @@
 'use client';
 
-import { Song, Album, Artist } from '@/types';
-import { useCallback, useEffect, useState } from 'react';
+import { Song } from '@/types';
+import { useEffect, useState } from 'react';
 import { api } from '@/services/api';
 import { Card } from '../ui/card';
 import { Music4, Edit, Trash2, Loader2, ArrowUpDown } from 'lucide-react';
@@ -26,14 +26,13 @@ import {
 import { SongForm } from '../forms/SongForm';
 import { ListProps } from '@/types/props';
 import { SongDetails } from '../details/SongDetails';
+import { useBasicData } from '@/hooks/useBasicData';
 
 const ITEMS_PER_PAGE = 10;
 
 export function SongList({ updateList, setUpdateList }: ListProps) {
-  const [songs, setSongs] = useState<Song[]>([]);
-  const [albums, setAlbums] = useState<Album[]>([]);
-  const [artists, setArtists] = useState<Artist[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const { songs, albums, artists, isLoading, setIsLoading, fetchData } =
+    useBasicData(() => setUpdateList(false));
   const [currentPage, setCurrentPage] = useState(1);
   const [sortField, setSortField] = useState<'name' | 'album' | 'artist'>(
     'name'
@@ -56,30 +55,6 @@ export function SongList({ updateList, setUpdateList }: ListProps) {
     isOpen: boolean;
     song: Song | null;
   }>({ isOpen: false, song: null });
-
-  const fetchData = useCallback(async () => {
-    setIsLoading(true);
-    try {
-      const [songsResponse, albumsResponse, artistsResponse] =
-        await Promise.all([
-          api.searchAssets<Song>('song'),
-          api.searchAssets<Album>('album'),
-          api.searchAssets<Artist>('artist'),
-        ]);
-
-      setSongs(songsResponse.result);
-      setAlbums(albumsResponse.result);
-      setArtists(artistsResponse.result);
-    } catch (error: unknown) {
-      toast.error('Erro ao carregar dados', {
-        description:
-          error instanceof Error ? error.message : 'Erro desconhecido',
-      });
-    } finally {
-      setIsLoading(false);
-      setUpdateList(false);
-    }
-  }, [setUpdateList]);
 
   useEffect(() => {
     fetchData();

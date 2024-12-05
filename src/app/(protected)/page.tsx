@@ -1,48 +1,25 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { api } from '@/services/api';
-import { Song, Album, Artist, Playlist } from '@/types';
+import { useEffect } from 'react';
 import { Card } from '@/components/ui/card';
 import { Music4, Disc3, User2, ListMusic, Loader } from 'lucide-react';
 import Link from 'next/link';
-import { toast } from 'sonner';
+import { useExtendedData } from '@/hooks/useExtendedData';
 
 export default function HomePage() {
-  const [isLoading, setIsLoading] = useState(true);
-  const [recentItems, setRecentItems] = useState({
-    songs: [] as Song[],
-    albums: [] as Album[],
-    artists: [] as Artist[],
-    playlists: [] as Playlist[],
-  });
+  const { songs, albums, artists, playlists, isLoading, fetchData } =
+    useExtendedData();
+
+  const recentItems = {
+    songs: songs.slice(-5),
+    albums: albums.slice(-5),
+    artists: artists.slice(-5),
+    playlists: playlists.slice(-5),
+  };
 
   useEffect(() => {
-    async function fetchRecentItems() {
-      try {
-        const [songs, albums, artists, playlists] = await Promise.all([
-          api.searchAssets<Song>('song'),
-          api.searchAssets<Album>('album'),
-          api.searchAssets<Artist>('artist'),
-          api.searchAssets<Playlist>('playlist'),
-        ]);
-
-        setRecentItems({
-          songs: songs.result.slice(-5),
-          albums: albums.result.slice(-5),
-          artists: artists.result.slice(-5),
-          playlists: playlists.result.slice(-5),
-        });
-      } catch (error) {
-        // console.error('Erro ao carregar itens recentes:', error);
-        toast.error('Erro ao carregar itens recentes');
-      } finally {
-        setIsLoading(false);
-      }
-    }
-
-    fetchRecentItems();
-  }, []);
+    fetchData();
+  }, [fetchData]);
 
   return (
     <div className='space-y-8'>
