@@ -1,14 +1,23 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Card } from '@/components/ui/card';
 import { Music4, Disc3, User2, ListMusic, Loader } from 'lucide-react';
 import Link from 'next/link';
 import { useExtendedData } from '@/hooks/useExtendedData';
+import { useDetails } from '@/hooks/useStates';
+import { PlaylistDetails } from '@/components/details/PlaylistDetails';
+import { SongDetails } from '@/components/details/SongDetails';
+import { AlbumDetails } from '@/components/details/AlbumDetails';
+import { ArtistDetails } from '@/components/details/ArtistDetails';
 
 export default function HomePage() {
+  const { detailsDialog, setDetailsDialog } = useDetails();
   const { songs, albums, artists, playlists, isLoading, fetchData } =
     useExtendedData();
+  const [detailsToOpen, setDetailsToOpen] = useState<
+    'playlist' | 'song' | 'album' | 'artist' | null
+  >(null);
 
   const recentItems = {
     songs: songs.slice(-5),
@@ -40,7 +49,11 @@ export default function HomePage() {
             {recentItems.songs.map((song) => (
               <Card
                 key={song['@key']}
-                className='p-3 border border-brand-pink/30'
+                className='p-3 border border-brand-pink/30 hover:bg-brand-pink/10 transition-colors cursor-pointer'
+                onClick={() => {
+                  setDetailsToOpen('song');
+                  setDetailsDialog({ isOpen: true, song });
+                }}
               >
                 <div className='flex items-center gap-3'>
                   <Music4 className='w-4 h-4 text-brand-pink' />
@@ -70,7 +83,11 @@ export default function HomePage() {
             {recentItems.albums.map((album) => (
               <Card
                 key={album['@key']}
-                className='p-3 border border-indigo-600/30'
+                className='p-3 border border-indigo-600/30 hover:bg-indigo-600/10 transition-colors cursor-pointer'
+                onClick={() => {
+                  setDetailsToOpen('album');
+                  setDetailsDialog({ isOpen: true, album });
+                }}
               >
                 <div className='flex items-center gap-3'>
                   <Disc3 className='w-4 h-4 text-indigo-600' />
@@ -100,7 +117,11 @@ export default function HomePage() {
             {recentItems.artists.map((artist) => (
               <Card
                 key={artist['@key']}
-                className='p-3 border border-brand-indigo/30'
+                className='p-3 border border-brand-indigo/30 hover:bg-brand-indigo/10 transition-colors cursor-pointer'
+                onClick={() => {
+                  setDetailsToOpen('artist');
+                  setDetailsDialog({ isOpen: true, artist });
+                }}
               >
                 <div className='flex items-center gap-3'>
                   <User2 className='w-4 h-4 text-brand-indigo' />
@@ -130,7 +151,15 @@ export default function HomePage() {
             {recentItems.playlists.map((playlist) => (
               <Card
                 key={playlist['@key']}
-                className='p-3 border border-brand-purple/30'
+                className={`p-3 border hover:bg-brand-purple/10 transition-colors cursor-pointer ${
+                  playlist.private
+                    ? 'border-red-500/30'
+                    : 'border-brand-purple/30'
+                }`}
+                onClick={() => {
+                  setDetailsToOpen('playlist');
+                  setDetailsDialog({ isOpen: true, playlist });
+                }}
               >
                 <div className='flex items-center gap-3'>
                   <ListMusic className='w-4 h-4 text-brand-purple' />
@@ -146,6 +175,97 @@ export default function HomePage() {
           </div>
         </section>
       </div>
+
+      {detailsToOpen === 'playlist' && (
+        <PlaylistDetails
+          isOpen={detailsDialog.isOpen}
+          onClose={() =>
+            setDetailsDialog({
+              isOpen: false,
+              playlist: null,
+              album: null,
+              artist: null,
+            })
+          }
+          playlist={detailsDialog.playlist!}
+          songs={songs.filter((song) =>
+            detailsDialog.playlist?.songs.some(
+              (s) => s['@key'] === song['@key']
+            )
+          )}
+          albums={albums}
+          artists={artists}
+        />
+      )}
+
+      {detailsToOpen === 'song' && (
+        <SongDetails
+          isOpen={detailsDialog.isOpen}
+          onClose={() =>
+            setDetailsDialog({
+              isOpen: false,
+              song: null,
+              album: null,
+              artist: null,
+            })
+          }
+          song={detailsDialog.song!}
+          album={albums.find(
+            (album) => album['@key'] === detailsDialog.song?.album['@key']
+          )}
+          artist={artists.find(
+            (artist) =>
+              artist['@key'] ===
+              albums.find(
+                (album) => album['@key'] === detailsDialog.song?.album['@key']
+              )?.artist['@key']
+          )}
+        />
+      )}
+
+      {detailsToOpen === 'album' && (
+        <AlbumDetails
+          isOpen={detailsDialog.isOpen}
+          onClose={() =>
+            setDetailsDialog({
+              isOpen: false,
+              album: null,
+              artist: null,
+              song: null,
+            })
+          }
+          album={detailsDialog.album!}
+          artist={artists.find(
+            (artist) => artist['@key'] === detailsDialog.album?.artist['@key']
+          )}
+          songs={songs.filter(
+            (song) => song.album['@key'] === detailsDialog.album?.['@key']
+          )}
+        />
+      )}
+
+      {detailsToOpen === 'artist' && (
+        <ArtistDetails
+          isOpen={detailsDialog.isOpen}
+          onClose={() =>
+            setDetailsDialog({
+              isOpen: false,
+              artist: null,
+              album: null,
+              song: null,
+            })
+          }
+          artist={detailsDialog.artist!}
+          albums={albums.filter(
+            (album) => album.artist['@key'] === detailsDialog.artist?.['@key']
+          )}
+          songs={songs.filter(
+            (song) =>
+              albums.find((album) => album['@key'] === song.album['@key'])
+                ?.artist['@key'] === detailsDialog.artist?.['@key']
+          )}
+        />
+      )}
     </div>
   );
 }
