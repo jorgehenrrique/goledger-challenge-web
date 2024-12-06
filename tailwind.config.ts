@@ -50,6 +50,9 @@ export default {
           '4': 'hsl(var(--chart-4))',
           '5': 'hsl(var(--chart-5))',
         },
+        'brand-pink': '#f165ab',
+        'brand-indigo': '#5c3ca8',
+        'brand-purple': '#9c3267',
       },
       borderRadius: {
         lg: 'var(--radius)',

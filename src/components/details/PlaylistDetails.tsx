@@ -42,14 +42,20 @@ export function PlaylistDetails({
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className='max-w-3xl max-h-[80vh] overflow-y-auto'>
+      <DialogContent
+        className={`max-w-3xl max-h-[80vh] overflow-y-auto ${
+          playlist?.private ? 'border-red-500/30' : 'border-brand-purple/30'
+        }`}
+      >
         <DialogHeader>
           <div className='flex items-center gap-4'>
-            <div className='p-3 bg-indigo-500/10 rounded-full'>
-              <ListMusic className='w-8 h-8 text-[#9c3267]' />
+            <div className='p-3 bg-brand-purple/10 rounded-full'>
+              <ListMusic className='w-8 h-8 text-brand-purple' />
             </div>
             <div>
-              <DialogTitle className='text-2xl'>{playlist?.name}</DialogTitle>
+              <DialogTitle className='text-2xl text-brand-purple'>
+                {playlist?.name}
+              </DialogTitle>
               <DialogDescription className='text-zinc-400'>
                 {playlist?.private ? 'Playlist Privada' : 'Playlist Pública'} •{' '}
                 {playlist?.songs.length} música
@@ -65,11 +71,11 @@ export function PlaylistDetails({
               const { albumName, artistName } = getSongInfo(song);
               return (
                 <Card key={song['@key']} className='p-3'>
-                  <div className='flex items-center gap-3'>
+                  <div className='flex items-center gap-3 text-brand-pink'>
                     <span className='text-sm text-zinc-400 w-6 text-right'>
                       {index + 1}
                     </span>
-                    <Music4 className='w-5 h-5 text-[#f165ab]' />
+                    <Music4 className='w-5 h-5 text-brand-pink' />
                     <div className='flex-1'>
                       <p>{song?.name}</p>
                       <p className='text-sm text-zinc-400'>

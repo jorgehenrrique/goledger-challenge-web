@@ -24,7 +24,9 @@ export function Sidebar() {
       className='w-48 h-screen bg-zinc-900 p-4 flex flex-col'
     >
       <div className='flex-1'>
-        <h1 className='text-xl font-bold mb-8 text-center'>GoLedger Music</h1>
+        <h1 className='text-xl font-bold mb-8 text-center text-indigo-600'>
+          GoLedger Music
+        </h1>
         <nav className='space-y-2'>
           {menuItems.map((item) => (
             <Link key={item.href} href={item.href}>

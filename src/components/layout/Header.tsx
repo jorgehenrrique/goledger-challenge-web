@@ -27,7 +27,7 @@ export function Header() {
         </div>
         <div className='flex gap-8'>
           <div className='flex items-center gap-2'>
-            <Music4 className='w-5 h-5 text-[#f165ab]' />
+            <Music4 className='w-5 h-5 text-brand-pink' />
             <div>
               <p className='text-sm font-medium'>{stats.songs}</p>
               <p className='text-xs text-zinc-400'>Músicas</p>
@@ -41,7 +41,7 @@ export function Header() {
             </div>
           </div>
           <div className='flex items-center gap-2'>
-            <User2 className='w-5 h-5 text-[#5c3ca8]' />
+            <User2 className='w-5 h-5 text-brand-indigo' />
             <div>
               <p className='text-sm font-medium'>{stats.artists}</p>
               <p className='text-xs text-zinc-400'>Artistas</p>

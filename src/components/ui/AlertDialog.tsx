@@ -26,7 +26,7 @@ export function DeleteAlertDialog({
 }: DeleteAlertDialogProps) {
   return (
     <AlertDialog open={isOpen} onOpenChange={(open) => !open && onCancel()}>
-      <AlertDialogContent>
+      <AlertDialogContent className='border border-red-600/30'>
         <AlertDialogHeader>
           <AlertDialogTitle>{title}</AlertDialogTitle>
           <AlertDialogDescription>{description}</AlertDialogDescription>

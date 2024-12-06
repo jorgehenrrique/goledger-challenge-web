@@ -28,14 +28,16 @@ export function ArtistDetails({
 }: ArtistDetailsProps) {
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className='max-w-3xl max-h-[80vh] overflow-y-auto'>
+      <DialogContent className='max-w-3xl max-h-[80vh] overflow-y-auto border border-brand-indigo/30'>
         <DialogHeader>
           <div className='flex items-center gap-4'>
-            <div className='p-3 bg-[#5c3ca8]/10 rounded-full'>
-              <User2 className='w-8 h-8 text-[#5c3ca8]' />
+            <div className='p-3 bg-brand-indigo/10 rounded-full'>
+              <User2 className='w-8 h-8 text-brand-indigo' />
             </div>
             <div>
-              <DialogTitle className='text-2xl'>{artist?.name}</DialogTitle>
+              <DialogTitle className='text-2xl text-brand-indigo'>
+                {artist?.name}
+              </DialogTitle>
               <DialogDescription className='text-zinc-400'>
                 {artist?.country}
               </DialogDescription>
@@ -53,7 +55,9 @@ export function ArtistDetails({
                     <div className='flex items-center gap-3'>
                       <Disc3 className='w-5 h-5 text-indigo-600' />
                       <div>
-                        <p className='font-medium'>{album?.name}</p>
+                        <p className='font-medium text-indigo-600'>
+                          {album?.name}
+                        </p>
                         <p className='text-sm text-zinc-400'>{album?.year}</p>
                       </div>
                     </div>
@@ -70,8 +74,8 @@ export function ArtistDetails({
                 {songs.map((song) => (
                   <Card key={song['@key']} className='p-3'>
                     <div className='flex items-center gap-3'>
-                      <Music4 className='w-5 h-5 text-[#f165ab]' />
-                      <span>{song?.name}</span>
+                      <Music4 className='w-5 h-5 text-brand-pink' />
+                      <span className='text-brand-pink'>{song?.name}</span>
                     </div>
                   </Card>
                 ))}

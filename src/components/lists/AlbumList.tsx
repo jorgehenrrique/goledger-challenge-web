@@ -27,6 +27,7 @@ import { AlbumForm } from '../forms/AlbumForm';
 import { ListProps } from '@/types/props';
 import { AlbumDetails } from '../details/AlbumDetails';
 import { useBasicData } from '@/hooks/useBasicData';
+import useDetails from '@/hooks/useDetails';
 
 const ITEMS_PER_PAGE = 10;
 
@@ -39,6 +40,7 @@ export function AlbumList({ updateList, setUpdateList }: ListProps) {
   );
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
   const [search, setSearch] = useState('');
+  const { detailsDialog, setDetailsDialog } = useDetails();
 
   const [deleteDialog, setDeleteDialog] = useState<{
     isOpen: boolean;
@@ -51,10 +53,10 @@ export function AlbumList({ updateList, setUpdateList }: ListProps) {
     album: Album | null;
   }>({ isOpen: false, album: null });
 
-  const [detailsDialog, setDetailsDialog] = useState<{
-    isOpen: boolean;
-    album: Album | null;
-  }>({ isOpen: false, album: null });
+  // const [detailsDialog, setDetailsDialog] = useState<{
+  //   isOpen: boolean;
+  //   album: Album | null;
+  // }>({ isOpen: false, album: null });
 
   useEffect(() => {
     fetchData();
@@ -162,10 +164,13 @@ export function AlbumList({ updateList, setUpdateList }: ListProps) {
 
       <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'>
         {paginatedAlbums.map((album) => (
-          <Card key={album['@key']} className='p-4'>
+          <Card
+            key={album['@key']}
+            className='p-4 hover:bg-zinc-800/50 transition-colors border border-indigo-600/30'
+          >
             <div className='flex flex-row justify-between gap-2'>
               <div
-                className='flex p-4 items-center gap-3 cursor-pointer hover:bg-zinc-800/50 transition-colors rounded-lg'
+                className='flex p-4 items-center gap-3 cursor-pointer hover:text-indigo-600 transition-colors rounded-lg'
                 onClick={() => setDetailsDialog({ isOpen: true, album })}
               >
                 <div className='p-2 bg-indigo-600/10 rounded-full w-fit'>
@@ -242,7 +247,7 @@ export function AlbumList({ updateList, setUpdateList }: ListProps) {
           !open && setEditDialog({ isOpen: false, album: null })
         }
       >
-        <DialogContent>
+        <DialogContent className='border border-amber-500/30'>
           <DialogHeader>
             <DialogTitle>Editar Álbum</DialogTitle>
             <DialogDescription>Edite as informações do álbum</DialogDescription>

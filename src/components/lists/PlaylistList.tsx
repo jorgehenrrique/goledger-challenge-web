@@ -27,6 +27,7 @@ import { PlaylistForm } from '../forms/PlaylistForm';
 import { ListProps } from '@/types/props';
 import { PlaylistDetails } from '../details/PlaylistDetails';
 import { useExtendedData } from '@/hooks/useExtendedData';
+import useDetails from '@/hooks/useDetails';
 
 const ITEMS_PER_PAGE = 10;
 
@@ -44,6 +45,7 @@ export function PlaylistList({ updateList, setUpdateList }: ListProps) {
   const [sortField, setSortField] = useState<'name' | 'songCount'>('name');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
   const [search, setSearch] = useState('');
+  const { detailsDialog, setDetailsDialog } = useDetails();
 
   const [deleteDialog, setDeleteDialog] = useState<{
     isOpen: boolean;
@@ -56,10 +58,10 @@ export function PlaylistList({ updateList, setUpdateList }: ListProps) {
     playlist: Playlist | null;
   }>({ isOpen: false, playlist: null });
 
-  const [detailsDialog, setDetailsDialog] = useState<{
-    isOpen: boolean;
-    playlist: Playlist | null;
-  }>({ isOpen: false, playlist: null });
+  // const [detailsDialog, setDetailsDialog] = useState<{
+  //   isOpen: boolean;
+  //   playlist: Playlist | null;
+  // }>({ isOpen: false, playlist: null });
 
   useEffect(() => {
     fetchData();
@@ -153,14 +155,19 @@ export function PlaylistList({ updateList, setUpdateList }: ListProps) {
 
       <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'>
         {paginatedPlaylists.map((playlist) => (
-          <Card key={playlist['@key']} className='p-4'>
+          <Card
+            key={playlist['@key']}
+            className={`p-4 hover:bg-zinc-800/50 transition-colors ${
+              playlist.private ? 'border-red-500/30' : 'border-brand-purple/30'
+            }`}
+          >
             <div className='flex flex-row justify-between gap-2'>
               <div
-                className='flex p-4 items-center gap-3 cursor-pointer hover:bg-zinc-800/50 transition-colors rounded-lg'
+                className='flex p-4 items-center gap-3 cursor-pointer hover:text-indigo-600 transition-colors rounded-lg'
                 onClick={() => setDetailsDialog({ isOpen: true, playlist })}
               >
-                <div className='p-2 bg-indigo-600/10 rounded-full w-fit'>
-                  <ListMusic className='w-6 h-6 text-[#9c3267]' />
+                <div className='p-2 bg-brand-purple/10 rounded-full w-fit'>
+                  <ListMusic className='w-6 h-6 text-brand-purple' />
                 </div>
                 <div className='flex-1'>
                   <h3 className='font-semibold'>{playlist.name}</h3>
@@ -233,7 +240,7 @@ export function PlaylistList({ updateList, setUpdateList }: ListProps) {
           !open && setEditDialog({ isOpen: false, playlist: null })
         }
       >
-        <DialogContent>
+        <DialogContent className='border border-amber-500/30'>
           <DialogHeader>
             <DialogTitle>Editar Playlist</DialogTitle>
             <DialogDescription>

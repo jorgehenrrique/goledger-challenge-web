@@ -28,14 +28,16 @@ export function SongDetails({
 }: SongDetailsProps) {
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className='max-w-3xl max-h-[80vh] overflow-y-auto'>
+      <DialogContent className='max-w-3xl max-h-[80vh] overflow-y-auto border border-brand-pink/30'>
         <DialogHeader>
           <div className='flex items-center gap-4'>
-            <div className='p-3 bg-[#f165ab]/10 rounded-full'>
-              <Music4 className='w-8 h-8 text-[#f165ab]' />
+            <div className='p-3 bg-brand-pink/10 rounded-full'>
+              <Music4 className='w-8 h-8 text-brand-pink' />
             </div>
             <div>
-              <DialogTitle className='text-2xl'>{song?.name}</DialogTitle>
+              <DialogTitle className='text-2xl text-brand-pink'>
+                {song?.name}
+              </DialogTitle>
               <DialogDescription className='flex items-center gap-2 text-zinc-400'>
                 {album && (
                   <>
@@ -46,7 +48,7 @@ export function SongDetails({
                 )}
                 {artist && (
                   <>
-                    <User2 className='w-4 h-4 text-[#5c3ca8]' />
+                    <User2 className='w-4 h-4 text-brand-indigo' />
                     <span>{artist.name}</span>
                   </>
                 )}
@@ -64,7 +66,7 @@ export function SongDetails({
               <div>
                 <p className='text-sm text-zinc-400'>Nome</p>
                 <div className='flex items-center gap-2'>
-                  <Music4 className='w-4 h-4 text-[#f165ab]' />
+                  <Music4 className='w-4 h-4 text-brand-pink' />
                   <p>{song?.name}</p>
                 </div>
               </div>
@@ -83,7 +85,7 @@ export function SongDetails({
                 <div>
                   <p className='text-sm text-zinc-400'>Artista</p>
                   <div className='flex items-center gap-2'>
-                    <User2 className='w-4 h-4 text-[#5c3ca8]' />
+                    <User2 className='w-4 h-4 text-brand-indigo' />
                     <p>
                       {artist?.name} • {artist?.country}
                     </p>

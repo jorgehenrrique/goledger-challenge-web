@@ -38,16 +38,19 @@ export default function HomePage() {
           </div>
           <div className='space-y-2'>
             {recentItems.songs.map((song) => (
-              <Card key={song['@key']} className='p-3'>
+              <Card
+                key={song['@key']}
+                className='p-3 border border-brand-pink/30'
+              >
                 <div className='flex items-center gap-3'>
-                  <Music4 className='w-4 h-4 text-[#f165ab]' />
-                  <span>{song.name}</span>
+                  <Music4 className='w-4 h-4 text-brand-pink' />
+                  <span className='text-brand-pink'>{song.name}</span>
                 </div>
               </Card>
             ))}
             {isLoading && (
               <div className='flex justify-center items-center h-full'>
-                <Loader className='w-10 h-10 animate-spin text-[#f165ab]' />
+                <Loader className='w-10 h-10 animate-spin text-brand-pink' />
               </div>
             )}
           </div>
@@ -65,10 +68,13 @@ export default function HomePage() {
           </div>
           <div className='space-y-2'>
             {recentItems.albums.map((album) => (
-              <Card key={album['@key']} className='p-3'>
+              <Card
+                key={album['@key']}
+                className='p-3 border border-indigo-600/30'
+              >
                 <div className='flex items-center gap-3'>
                   <Disc3 className='w-4 h-4 text-indigo-600' />
-                  <span>{album.name}</span>
+                  <span className='text-indigo-600'>{album.name}</span>
                 </div>
               </Card>
             ))}
@@ -92,16 +98,19 @@ export default function HomePage() {
           </div>
           <div className='space-y-2'>
             {recentItems.artists.map((artist) => (
-              <Card key={artist['@key']} className='p-3'>
+              <Card
+                key={artist['@key']}
+                className='p-3 border border-brand-indigo/30'
+              >
                 <div className='flex items-center gap-3'>
-                  <User2 className='w-4 h-4 text-[#5c3ca8]' />
-                  <span>{artist.name}</span>
+                  <User2 className='w-4 h-4 text-brand-indigo' />
+                  <span className='text-brand-indigo'>{artist.name}</span>
                 </div>
               </Card>
             ))}
             {isLoading && (
               <div className='flex justify-center items-center h-full'>
-                <Loader className='w-10 h-10 animate-spin text-[#5c3ca8]' />
+                <Loader className='w-10 h-10 animate-spin text-brand-indigo' />
               </div>
             )}
           </div>
@@ -119,16 +128,19 @@ export default function HomePage() {
           </div>
           <div className='space-y-2'>
             {recentItems.playlists.map((playlist) => (
-              <Card key={playlist['@key']} className='p-3'>
+              <Card
+                key={playlist['@key']}
+                className='p-3 border border-brand-purple/30'
+              >
                 <div className='flex items-center gap-3'>
-                  <ListMusic className='w-4 h-4 text-[#9c3267]' />
-                  <span>{playlist.name}</span>
+                  <ListMusic className='w-4 h-4 text-brand-purple' />
+                  <span className='text-brand-purple'>{playlist.name}</span>
                 </div>
               </Card>
             ))}
             {isLoading && (
               <div className='flex justify-center items-center h-full'>
-                <Loader className='w-10 h-10 animate-spin text-[#9c3267]' />
+                <Loader className='w-10 h-10 animate-spin text-brand-purple' />
               </div>
             )}
           </div>

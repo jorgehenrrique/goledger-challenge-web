@@ -27,6 +27,7 @@ import { ArtistForm } from '../forms/ArtistForm';
 import { ListProps } from '@/types/props';
 import { ArtistDetails } from '../details/ArtistDetails';
 import { useBasicData } from '@/hooks/useBasicData';
+import useDetails from '@/hooks/useDetails';
 
 const ITEMS_PER_PAGE = 10;
 
@@ -37,6 +38,7 @@ export function ArtistList({ updateList, setUpdateList }: ListProps) {
   const [sortField, setSortField] = useState<'name' | 'country'>('name');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
   const [search, setSearch] = useState('');
+  const { detailsDialog, setDetailsDialog } = useDetails();
 
   const [deleteDialog, setDeleteDialog] = useState<{
     isOpen: boolean;
@@ -49,10 +51,10 @@ export function ArtistList({ updateList, setUpdateList }: ListProps) {
     artist: Artist | null;
   }>({ isOpen: false, artist: null });
 
-  const [detailsDialog, setDetailsDialog] = useState<{
-    isOpen: boolean;
-    artist: Artist | null;
-  }>({ isOpen: false, artist: null });
+  // const [detailsDialog, setDetailsDialog] = useState<{
+  //   isOpen: boolean;
+  //   artist: Artist | null;
+  // }>({ isOpen: false, artist: null });
 
   useEffect(() => {
     fetchData();
@@ -139,14 +141,17 @@ export function ArtistList({ updateList, setUpdateList }: ListProps) {
 
       <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'>
         {paginatedArtists.map((artist) => (
-          <Card key={artist['@key']} className='p-4'>
+          <Card
+            key={artist['@key']}
+            className='p-4 hover:bg-zinc-800/50 transition-colors border border-brand-indigo/30'
+          >
             <div className='flex flex-row justify-between gap-2'>
               <div
-                className='flex p-4 items-center gap-3 cursor-pointer hover:bg-zinc-800/50 transition-colors rounded-lg'
+                className='flex p-4 items-center gap-3 cursor-pointer hover:text-indigo-600 transition-colors rounded-lg'
                 onClick={() => setDetailsDialog({ isOpen: true, artist })}
               >
-                <div className='p-2 bg-indigo-600/10 rounded-full w-fit'>
-                  <Mic2 className='w-6 h-6 text-[#5c3ca8]' />
+                <div className='p-2 bg-brand-indigo/10 rounded-full w-fit'>
+                  <Mic2 className='w-6 h-6 text-brand-indigo' />
                 </div>
                 <div className='flex-1'>
                   <h3 className='font-semibold'>{artist.name}</h3>
@@ -217,7 +222,7 @@ export function ArtistList({ updateList, setUpdateList }: ListProps) {
           !open && setEditDialog({ isOpen: false, artist: null })
         }
       >
-        <DialogContent>
+        <DialogContent className='border border-amber-500/30'>
           <DialogHeader>
             <DialogTitle>Editar Artista</DialogTitle>
             <DialogDescription>
