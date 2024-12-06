@@ -165,7 +165,7 @@ export function SongList({ updateList, setUpdateList }: ListProps) {
           return (
             <Card
               key={song['@key']}
-              className='p-4 hover:bg-zinc-800/50 transition-colors border border-brand-pink/30'
+              className='p-4 hover:bg-zinc-800/50 transition-colors border border-brand-pink/30 overflow-hidden'
             >
               <div className='flex flex-row justify-between gap-2'>
                 <div

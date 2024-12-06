@@ -10,14 +10,13 @@ import { PlaylistDetails } from '@/components/details/PlaylistDetails';
 import { SongDetails } from '@/components/details/SongDetails';
 import { AlbumDetails } from '@/components/details/AlbumDetails';
 import { ArtistDetails } from '@/components/details/ArtistDetails';
+import { ItemType } from '@/types/props';
 
 export default function HomePage() {
   const { detailsDialog, setDetailsDialog } = useDetails();
   const { songs, albums, artists, playlists, isLoading, fetchData } =
     useExtendedData();
-  const [detailsToOpen, setDetailsToOpen] = useState<
-    'playlist' | 'song' | 'album' | 'artist' | null
-  >(null);
+  const [detailsToOpen, setDetailsToOpen] = useState<ItemType | null>(null);
 
   const recentItems = {
     songs: songs.slice(-5),
@@ -183,8 +182,6 @@ export default function HomePage() {
             setDetailsDialog({
               isOpen: false,
               playlist: null,
-              album: null,
-              artist: null,
             })
           }
           playlist={detailsDialog.playlist!}
@@ -205,8 +202,6 @@ export default function HomePage() {
             setDetailsDialog({
               isOpen: false,
               song: null,
-              album: null,
-              artist: null,
             })
           }
           song={detailsDialog.song!}
@@ -230,8 +225,6 @@ export default function HomePage() {
             setDetailsDialog({
               isOpen: false,
               album: null,
-              artist: null,
-              song: null,
             })
           }
           album={detailsDialog.album!}
@@ -251,8 +244,6 @@ export default function HomePage() {
             setDetailsDialog({
               isOpen: false,
               artist: null,
-              album: null,
-              song: null,
             })
           }
           artist={detailsDialog.artist!}

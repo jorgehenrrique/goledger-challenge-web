@@ -73,8 +73,8 @@ body {
 
 @layer utilities {
   .backdrop-blur-dialog {
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
   }
 }
 

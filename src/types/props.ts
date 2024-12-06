@@ -33,3 +33,20 @@ export interface SongFormProps extends FormProps {
 export interface PlaylistFormProps extends FormProps {
   playlist?: Playlist;
 }
+
+// Header
+export type ItemType = 'song' | 'album' | 'artist' | 'playlist';
+
+export interface SearchItem {
+  id: string;
+  name: string;
+  type: ItemType;
+}
+export interface SearchResults {
+  songs: SearchItem[];
+  albums: SearchItem[];
+  artists: SearchItem[];
+  playlists: SearchItem[];
+}
+
+export type HandleItemClick = (type: ItemType, id: string) => void;

@@ -151,7 +151,7 @@ export function AlbumList({ updateList, setUpdateList }: ListProps) {
         {paginatedAlbums.map((album) => (
           <Card
             key={album['@key']}
-            className='p-4 hover:bg-zinc-800/50 transition-colors border border-indigo-600/30'
+            className='p-4 hover:bg-zinc-800/50 transition-colors border border-indigo-600/30 overflow-hidden'
           >
             <div className='flex flex-row justify-between gap-2'>
               <div

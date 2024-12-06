@@ -145,7 +145,7 @@ export function PlaylistList({ updateList, setUpdateList }: ListProps) {
             key={playlist['@key']}
             className={`p-4 hover:bg-zinc-800/50 transition-colors ${
               playlist.private ? 'border-red-500/30' : 'border-brand-purple/30'
-            }`}
+            } overflow-hidden`}
           >
             <div className='flex flex-row justify-between gap-2'>
               <div
