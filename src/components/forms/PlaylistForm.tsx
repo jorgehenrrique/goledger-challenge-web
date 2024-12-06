@@ -6,19 +6,18 @@ import { Input } from '../ui/input';
 import { Button } from '../ui/button';
 import { toast } from 'sonner';
 import { Loader2 } from 'lucide-react';
-import { Song, Album, Artist, PlaylistPayload } from '@/types';
+import { PlaylistPayload } from '@/types';
 import { Checkbox } from '../ui/checkbox';
 import { PlaylistFormProps } from '@/types/props';
+import { useBasicData } from '@/hooks/useBasicData';
 
 export function PlaylistForm({
   playlist,
   onSuccess,
   onCancel,
 }: PlaylistFormProps) {
-  const [isLoading, setIsLoading] = useState(false);
-  const [songs, setSongs] = useState<Song[]>([]);
-  const [albums, setAlbums] = useState<Album[]>([]);
-  const [artists, setArtists] = useState<Artist[]>([]);
+  const { songs, albums, artists, isLoading, setIsLoading, fetchData } =
+    useBasicData();
   const [songSearch, setSongSearch] = useState('');
   const [formData, setFormData] = useState({
     name: playlist?.name || '',
@@ -27,26 +26,8 @@ export function PlaylistForm({
   });
 
   useEffect(() => {
-    async function fetchData() {
-      try {
-        const [songsResponse, albumsResponse, artistsResponse] =
-          await Promise.all([
-            api.searchAssets<Song>('song'),
-            api.searchAssets<Album>('album'),
-            api.searchAssets<Artist>('artist'),
-          ]);
-        setSongs(songsResponse.result);
-        setAlbums(albumsResponse.result);
-        setArtists(artistsResponse.result);
-      } catch (error) {
-        toast.error('Erro ao carregar dados', {
-          description:
-            error instanceof Error ? error.message : 'Erro desconhecido',
-        });
-      }
-    }
     fetchData();
-  }, []);
+  }, [fetchData]);
 
   const getSongInfo = (songKey: string) => {
     const song = songs.find((s) => s['@key'] === songKey);
