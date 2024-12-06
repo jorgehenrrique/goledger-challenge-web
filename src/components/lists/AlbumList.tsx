@@ -1,6 +1,5 @@
 'use client';
 
-import { Album } from '@/types';
 import { useEffect, useState } from 'react';
 import { api } from '@/services/api';
 import { Card } from '../ui/card';
@@ -27,7 +26,7 @@ import { AlbumForm } from '../forms/AlbumForm';
 import { ListProps } from '@/types/props';
 import { AlbumDetails } from '../details/AlbumDetails';
 import { useBasicData } from '@/hooks/useBasicData';
-import useDetails from '@/hooks/useDetails';
+import { useDelete, useDetails, useDialog } from '@/hooks/useStates';
 
 const ITEMS_PER_PAGE = 10;
 
@@ -41,22 +40,8 @@ export function AlbumList({ updateList, setUpdateList }: ListProps) {
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
   const [search, setSearch] = useState('');
   const { detailsDialog, setDetailsDialog } = useDetails();
-
-  const [deleteDialog, setDeleteDialog] = useState<{
-    isOpen: boolean;
-    albumId: string | null;
-    albumName: string | null;
-  }>({ isOpen: false, albumId: null, albumName: null });
-
-  const [editDialog, setEditDialog] = useState<{
-    isOpen: boolean;
-    album: Album | null;
-  }>({ isOpen: false, album: null });
-
-  // const [detailsDialog, setDetailsDialog] = useState<{
-  //   isOpen: boolean;
-  //   album: Album | null;
-  // }>({ isOpen: false, album: null });
+  const { editDialog, setEditDialog } = useDialog();
+  const { deleteDialog, setDeleteDialog } = useDelete();
 
   useEffect(() => {
     fetchData();
