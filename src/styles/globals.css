@@ -6,11 +6,17 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
+html * {
+  transition: background-color 0.6s ease-in, border-color 0.6s ease-out,
+    color 0.1s ease-in;
+}
+
 @layer base {
   :root {
     --background: 0 0% 100%;
     --foreground: 240 10% 3.9%;
     --card: 0 0% 100%;
+    --sidebar: 200 20% 90%;
     --card-foreground: 240 10% 3.9%;
     --popover: 0 0% 100%;
     --popover-foreground: 240 10% 3.9%;
@@ -38,6 +44,7 @@ body {
     --background: 240 10% 3.9%;
     --foreground: 0 0% 98%;
     --card: 240 10% 3.9%;
+    --sidebar: 240 40% 8%;
     --card-foreground: 0 0% 98%;
     --popover: 240 10% 3.9%;
     --popover-foreground: 0 0% 98%;

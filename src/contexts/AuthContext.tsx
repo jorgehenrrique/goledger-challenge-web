@@ -1,5 +1,6 @@
 'use client';
 
+import { ChildrenProps } from '@/types/props';
 import { createContext, useContext, useEffect, useState } from 'react';
 
 interface AuthContextType {
@@ -10,7 +11,7 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | null>(null);
 
-export function AuthProvider({ children }: { children: React.ReactNode }) {
+export function AuthProvider({ children }: ChildrenProps) {
   const [token, setToken] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 

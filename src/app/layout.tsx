@@ -4,6 +4,7 @@ import '../styles/globals.css';
 import { AuthProvider } from '@/contexts/AuthContext';
 import { Toaster } from 'sonner';
 import { ChildrenProps } from '@/types/props';
+import { ThemeProvider } from '@/contexts/ThemeContext';
 
 const geistSans = localFont({
   src: '../assets/fonts/GeistVF.woff',
@@ -42,8 +43,10 @@ export default function RootLayout({ children }: ChildrenProps) {
   return (
     <html lang='pt-BR' className='dark'>
       <body className={`${geistSans.variable} antialiased`}>
-        <AuthProvider>{children}</AuthProvider>
-        <Toaster richColors closeButton position='top-right' />
+        <ThemeProvider>
+          <AuthProvider>{children}</AuthProvider>
+          <Toaster richColors closeButton position='top-right' />
+        </ThemeProvider>
       </body>
     </html>
   );
