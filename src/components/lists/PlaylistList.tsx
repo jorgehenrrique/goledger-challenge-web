@@ -27,7 +27,7 @@ import { PlaylistForm } from '../forms/PlaylistForm';
 import { ListProps } from '@/types/props';
 import { PlaylistDetails } from '../details/PlaylistDetails';
 import { useExtendedData } from '@/hooks/useExtendedData';
-import { useDelete, useDetails, useDialog } from '@/hooks/useStates';
+import { useCommon, useDelete, useDetails, useDialog } from '@/hooks/useStates';
 
 const ITEMS_PER_PAGE = 10;
 
@@ -41,13 +41,18 @@ export function PlaylistList({ updateList, setUpdateList }: ListProps) {
     setIsLoading,
     fetchData,
   } = useExtendedData(() => setUpdateList(false));
-  const [currentPage, setCurrentPage] = useState(1);
   const [sortField, setSortField] = useState<'name' | 'songCount'>('name');
-  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
-  const [search, setSearch] = useState('');
   const { detailsDialog, setDetailsDialog } = useDetails();
   const { editDialog, setEditDialog } = useDialog();
   const { deleteDialog, setDeleteDialog } = useDelete();
+  const {
+    currentPage,
+    sortOrder,
+    search,
+    setCurrentPage,
+    setSortOrder,
+    setSearch,
+  } = useCommon();
 
   useEffect(() => {
     fetchData();

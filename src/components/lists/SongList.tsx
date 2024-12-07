@@ -26,22 +26,27 @@ import { SongForm } from '../forms/SongForm';
 import { ListProps } from '@/types/props';
 import { SongDetails } from '../details/SongDetails';
 import { useBasicData } from '@/hooks/useBasicData';
-import { useDelete, useDetails, useDialog } from '@/hooks/useStates';
+import { useCommon, useDelete, useDetails, useDialog } from '@/hooks/useStates';
 
 const ITEMS_PER_PAGE = 10;
 
 export function SongList({ updateList, setUpdateList }: ListProps) {
   const { songs, albums, artists, isLoading, setIsLoading, fetchData } =
     useBasicData(() => setUpdateList(false));
-  const [currentPage, setCurrentPage] = useState(1);
   const [sortField, setSortField] = useState<'name' | 'album' | 'artist'>(
     'name'
   );
-  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
-  const [search, setSearch] = useState('');
   const { detailsDialog, setDetailsDialog } = useDetails();
   const { editDialog, setEditDialog } = useDialog();
   const { deleteDialog, setDeleteDialog } = useDelete();
+  const {
+    currentPage,
+    sortOrder,
+    search,
+    setCurrentPage,
+    setSortOrder,
+    setSearch,
+  } = useCommon();
 
   useEffect(() => {
     fetchData();

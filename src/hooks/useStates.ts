@@ -40,3 +40,19 @@ export function useDelete() {
 
   return { deleteDialog, setDeleteDialog };
 }
+
+// States comuns
+export function useCommon() {
+  const [currentPage, setCurrentPage] = useState(1);
+  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
+  const [search, setSearch] = useState('');
+
+  return {
+    currentPage,
+    sortOrder,
+    search,
+    setCurrentPage,
+    setSortOrder,
+    setSearch,
+  };
+}
