@@ -97,7 +97,7 @@ export function Header() {
               setShowResults(true);
             }}
             placeholder='Buscar em toda biblioteca...'
-            className='pl-10 pr-8'
+            className='pl-10 pr-8 min-w-40'
           />
           {search && (
             <Button
@@ -114,7 +114,7 @@ export function Header() {
           )}
 
           {showResults && search && (
-            <Card className='absolute top-full mt-2 w-full p-2 space-y-4 border-zinc-800 bg-indigo-900/20 backdrop-blur-dialog z-50 overflow-hidden'>
+            <Card className='absolute top-full mt-2 w-full p-2 space-y-4 border-zinc-800 bg-indigo-900/20 backdrop-blur-dialog z-50 overflow-hidden min-w-56'>
               {Object.entries(searchResults).map(
                 ([category, items]) =>
                   items.length > 0 && (
@@ -152,7 +152,7 @@ export function Header() {
             </Card>
           )}
         </div>
-        <div className='flex gap-8'>
+        <div className='flex gap-8 max-sm:hidden ml-4'>
           <div className='flex items-center gap-2'>
             <Music4 className='w-5 h-5 text-brand-pink' />
             <div>
